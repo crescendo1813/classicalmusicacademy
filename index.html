@@ -1,0 +1,2453 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crescendo Classical Music Academy - Member Login</title>
+    <style>
+        /* Alap stílusok */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            overflow-x: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Login container */
+        .login-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 40px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .login-title {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #ffd93d;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-subtitle {
+            font-size: 16px;
+            margin-bottom: 30px;
+            color: #a5b4fc;
+        }
+
+        .music-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            color: #ffd93d;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Form elements */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #a5b4fc;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            box-sizing: border-box;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #ffd93d;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #ffd93d;
+            color: #333;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            background: #ffc107;
+            transform: translateY(-2px);
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            margin-top: 15px;
+            font-size: 14px;
+            display: none;
+        }
+
+        /* Main content (hidden initially) */
+        #main-content {
+            display: none;
+            width: 100%;
+            padding: 20px;
+        }
+
+        /* Stílusok a fő tartalomhoz */
+        .main-body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #111;
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        h1 {
+            color: #ff6b6b;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #a5b4fc;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        /* Gombok */
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            background: #222;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid #444;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #333;
+            transform: translateY(-2px);
+        }
+
+        .start-btn {
+            border-color: #4CAF50;
+            background: #2d5a2d;
+        }
+
+        .stop-btn {
+            border-color: #f44336;
+            background: #5a2d2d;
+        }
+
+        .load-btn {
+            border-color: #2196F3;
+            background: #2d3c5a;
+        }
+
+        .graceful-btn {
+            border-color: #FF9800;
+            background: #5a472d;
+        }
+
+        /* Timer display */
+        .timer-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .timer {
+            font-size: 48px;
+            font-weight: bold;
+            color: #ffd93d;
+            margin: 10px 0;
+        }
+
+        .timer-label {
+            font-size: 16px;
+            color: #a5b4fc;
+        }
+
+        /* Graceful shutdown timer */
+        .graceful-timer {
+            background: rgba(255, 152, 0, 0.2);
+            border: 1px solid #FF9800;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+        }
+
+        .graceful-title {
+            font-size: 16px;
+            color: #ffd93d;
+            margin-bottom: 10px;
+        }
+
+        .graceful-time {
+            font-size: 24px;
+            font-weight: bold;
+            color: #FF9800;
+            margin: 10px 0;
+        }
+
+        /* Batch progress */
+        .batch-progress {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+
+        .batch-step {
+            text-align: center;
+            flex: 1;
+            padding: 10px;
+            position: relative;
+        }
+
+        .batch-step.active {
+            color: #ffd93d;
+        }
+
+        .batch-step.completed {
+            color: #4CAF50;
+        }
+
+        .batch-step::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 0;
+            width: 100%;
+            height: 2px;
+            background: #333;
+            z-index: -1;
+        }
+
+        .batch-step:last-child::after {
+            display: none;
+        }
+
+        .batch-step.active::after {
+            background: #ffd93d;
+        }
+
+        .batch-step.completed::after {
+            background: #4CAF50;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd93d;
+            margin: 5px 0;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #a5b4fc;
+        }
+
+        /* Reklám statisztikák */
+        .ad-stats {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .ad-title {
+            font-size: 16px;
+            color: #ffd93d;
+            margin-bottom: 10px;
+        }
+
+        /* Progress bar */
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: #333;
+            border-radius: 3px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #ffd93d);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Status message */
+        .status {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 16px;
+            border-left: 4px solid #ff6b6b;
+        }
+
+        /* Playback statistics */
+        .playback-stats {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .playback-title {
+            font-size: 16px;
+            color: #ffd93d;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .playback-info {
+            font-size: 14px;
+            color: #a5b4fc;
+            text-align: center;
+        }
+
+        .tip {
+            font-size: 12px;
+            color: #666;
+            margin-top: 20px;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .loading {
+            text-align: center;
+            color: #ffd93d;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        /* Új védelmi indikátorok */
+        .security-indicators {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .security-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid;
+            font-size: 12px;
+        }
+
+        .security-card.safe {
+            border-color: #4CAF50;
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .security-card.warning {
+            border-color: #ff9800;
+            background: rgba(255, 152, 0, 0.1);
+        }
+
+        .security-card.danger {
+            border-color: #f44336;
+            background: rgba(244, 67, 54, 0.1);
+        }
+
+        .risk-monitor {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .risk-level {
+            height: 10px;
+            background: linear-gradient(90deg, #4CAF50, #ff9800, #f44336);
+            border-radius: 5px;
+            margin: 10px 0;
+            position: relative;
+        }
+
+        .risk-indicator {
+            position: absolute;
+            top: -2px;
+            width: 14px;
+            height: 14px;
+            background: white;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            transition: left 0.5s ease;
+        }
+
+        /* Memória monitor */
+        .memory-monitor {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .memory-title {
+            font-size: 16px;
+            color: #ffd93d;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .memory-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .memory-stat {
+            text-align: center;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+        }
+
+        .memory-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffd93d;
+            margin: 5px 0;
+        }
+
+        .memory-label {
+            font-size: 11px;
+            color: #a5b4fc;
+        }
+
+        .memory-bar {
+            height: 8px;
+            background: #333;
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .memory-usage {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #ff9800, #f44336);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .cleanup-alert {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid #f44336;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+            text-align: center;
+            font-size: 12px;
+            display: none;
+        }
+
+        /* Stealth monitor */
+        .stealth-monitor {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #9C27B0;
+        }
+
+        .stealth-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .stealth-metric {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        .stealth-status {
+            text-align: center;
+            font-size: 14px;
+            color: #a5b4fc;
+            margin-top: 10px;
+        }
+
+        /* Videós player konténer - WEBOLDAL RÉSZEKÉNT */
+        .video-container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .video-title {
+            font-size: 16px;
+            color: #ffd93d;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .video-player {
+            background: #000;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            border: 1px solid #444;
+        }
+
+        .video-player:hover {
+            transform: translateY(-3px);
+        }
+
+        .player-container {
+            width: 100%;
+            height: 120px;
+            background: #000;
+            cursor: pointer;
+        }
+
+        .video-info {
+            padding: 8px;
+            font-size: 10px;
+            color: #a5b4fc;
+            text-align: center;
+        }
+
+        .ad-indicator {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255, 193, 7, 0.9);
+            color: #000;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .click-status {
+            position: absolute;
+            bottom: 25px;
+            left: 5px;
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: bold;
+        }
+
+        /* Új debug stílusok */
+        .debug-panel {
+            background: rgba(255, 0, 0, 0.1);
+            border: 2px solid #f44336;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        
+        .debug-title {
+            color: #f44336;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .debug-info {
+            color: #ff9800;
+            margin: 5px 0;
+        }
+        
+        .debug-error {
+            color: #f44336;
+            font-weight: bold;
+        }
+        
+        .debug-success {
+            color: #4CAF50;
+        }
+        
+        .element-state {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 8px;
+            z-index: 1000;
+        }
+        
+        /* Batch betöltés gomb */
+        .batch-controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        /* Fingerprint display */
+        .fingerprint-info {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        /* Profi védelmi elemek */
+        .advanced-protection {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #00BCD4;
+        }
+
+        .protection-title {
+            font-size: 16px;
+            color: #ffd93d;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .protection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .protection-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .protection-status {
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .protection-status.active {
+            color: #4CAF50;
+        }
+
+        .protection-status.inactive {
+            color: #f44336;
+        }
+
+        /* Traffic simulation */
+        .traffic-simulation {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #FF5722;
+        }
+
+        .traffic-title {
+            font-size: 16px;
+            color: #ffd93d;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .traffic-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .traffic-stat {
+            text-align: center;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+        }
+
+        .traffic-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffd93d;
+            margin: 5px 0;
+        }
+
+        .traffic-label {
+            font-size: 11px;
+            color: #a5b4fc;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Section -->
+    <div id="login-section" class="login-container">
+        <div class="music-icon">🎵</div>
+        <h1 class="login-title">Crescendo Classical Music Academy</h1>
+        <p class="login-subtitle">Access restricted to academy members only</p>
+        
+        <form id="login-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter your username" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+            </div>
+            
+            <button type="submit" class="login-btn">Login to Academy Portal</button>
+            
+            <div id="error-message" class="error-message">
+                Invalid credentials. Please try again.
+            </div>
+        </form>
+    </div>
+
+    <!-- Main Content (Hidden until login) -->
+    <div id="main-content" class="main-body">
+        <div id="am-experiment">
+            <h1>🎬 Videós Zóna Kísérlet - Manuális Vezérlés</h1>
+            <p class="subtitle">Videós player-ek + Reklámok + Manuális indítás + Teljes funkcionalitás</p>
+
+            <!-- Reklám statisztikák FELÜL -->
+            <div class="ad-stats">
+                <div class="ad-title">📊 Reklám Statisztikák</div>
+                <div>Összes reklám: <span id="totalAds">0</span> | Sikeres reklámok: <span id="successfulAds">0</span></div>
+                <div>Reklám bevétel becslés: $<span id="adRevenue">0.00</span></div>
+            </div>
+
+            <!-- Védelmi indikátorok -->
+            <div class="security-indicators">
+                <div class="security-card safe" id="patternCard">
+                    <div>🎯 Indítási Minta</div>
+                    <div>Manuális</div>
+                </div>
+                <div class="security-card safe" id="timingCard">
+                    <div>⏱️ Időzítés</div>
+                    <div>Felhasználó által</div>
+                </div>
+                <div class="security-card safe" id="behaviorCard">
+                    <div>👤 Viselkedés</div>
+                    <div>Emberi</div>
+                </div>
+                <div class="security-card safe" id="riskCard">
+                    <div>🛡️ Kockázat</div>
+                    <div>Alacsony</div>
+                </div>
+            </div>
+
+            <!-- DEBUG PANEL -->
+            <div class="debug-panel">
+                <div class="debug-title">🔍 DEBUG PANEL - Manuális Mód</div>
+                <div class="debug-info" id="debugClickStatus">Mód: Manuális kattintás</div>
+                <div class="debug-info" id="debugElementState">Elem állapot: Kézi indításra vár</div>
+                <div class="debug-info" id="debugEventStatus">Esemény állapot: Felhasználói interakció</div>
+                <div class="debug-info" id="debugFrameStatus">IFrame állapot: Kész</div>
+                <div class="debug-info" id="debugTimingStatus">Időzítés: Nincs automatikus</div>
+            </div>
+
+            <!-- Graciális leállás timer -->
+            <div class="graceful-timer" id="gracefulTimer">
+                <div class="graceful-title">🕐 Graciális Leállás Aktív</div>
+                <div class="graceful-time" id="gracefulTime">--:--</div>
+                <div id="gracefulStatus">A videók fokozatosan leállnak...</div>
+            </div>
+
+            <!-- Profi védelmi elemek -->
+            <div class="advanced-protection">
+                <div class="protection-title">🛡️ Profi Hacker Védelmi Rendszer</div>
+                <div class="protection-grid">
+                    <div class="protection-item">
+                        <div>🌐 IP Rotáció</div>
+                        <div class="protection-status active" id="ipRotationStatus">Aktív</div>
+                    </div>
+                    <div class="protection-item">
+                        <div>🔒 Traffic Titkosítás</div>
+                        <div class="protection-status active" id="trafficEncryptionStatus">Aktív</div>
+                    </div>
+                    <div class="protection-item">
+                        <div>🔄 User Agent Randomizálás</div>
+                        <div class="protection-status active" id="userAgentStatus">Aktív</div>
+                    </div>
+                    <div class="protection-item">
+                        <div>📱 Eszköz Szimuláció</div>
+                        <div class="protection-status active" id="deviceSimulationStatus">Aktív</div>
+                    </div>
+                    <div class="protection-item">
+                        <div>🌍 Geolokáció Maszkolás</div>
+                        <div class="protection-status active" id="geolocationStatus">Aktív</div>
+                    </div>
+                    <div class="protection-item">
+                        <div>⏰ Időzóna Manipuláció</div>
+                        <div class="protection-status active" id="timezoneStatus">Aktív</div>
+                    </div>
+                    <div class="protection-item">
+                        <div>🎭 Canvas Fingerprint Spoofing</div>
+                        <div class="protection-status active" id="canvasSpoofingStatus">Aktív</div>
+                    </div>
+                    <div class="protection-item">
+                        <div>🔍 WebRTC Blokkolás</div>
+                        <div class="protection-status active" id="webrtcStatus">Aktív</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Forgalom szimuláció -->
+            <div class="traffic-simulation">
+                <div class="traffic-title">🌐 Forgalom Szimuláció & IP Maszkolás</div>
+                <div class="traffic-stats">
+                    <div class="traffic-stat">
+                        <div class="traffic-value" id="currentIP">192.168.1.1</div>
+                        <div class="traffic-label">Aktuális IP</div>
+                    </div>
+                    <div class="traffic-stat">
+                        <div class="traffic-value" id="requestCount">0</div>
+                        <div class="traffic-label">Kérések</div>
+                    </div>
+                    <div class="traffic-stat">
+                        <div class="traffic-value" id="sessionTime">00:00</div>
+                        <div class="traffic-label">Munkamenet</div>
+                    </div>
+                    <div class="traffic-stat">
+                        <div class="traffic-value" id="fingerprintCount">0</div>
+                        <div class="traffic-label">Ujjlenyomatok</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kockázat monitor -->
+            <div class="risk-monitor">
+                <div style="text-align: center; color: #ffd93d; margin-bottom: 10px;">
+                    🎛️ Viselkedés Monitor - Manuális mód
+                </div>
+                <div class="risk-level">
+                    <div class="risk-indicator" id="riskIndicator" style="left: 5%;"></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 12px; color: #a5b4fc;">
+                    <span>Alacsony</span>
+                    <span>Közepes</span>
+                    <span>Magas</span>
+                </div>
+                <div id="riskStatus" style="text-align: center; margin-top: 10px; font-size: 14px;">
+                    ✅ Minden paraméter optimális - Manuális mód
+                </div>
+            </div>
+
+            <!-- Memória Monitor -->
+            <div class="memory-monitor">
+                <div class="memory-title">🧠 Memória Monitor - Manuális Mód</div>
+                <div class="memory-info">
+                    <div class="memory-stat">
+                        <div class="memory-value" id="memoryUsage">0 MB</div>
+                        <div class="memory-label">Használat</div>
+                    </div>
+                    <div class="memory-stat">
+                        <div class="memory-value" id="memoryLimit">0 MB</div>
+                        <div class="memory-label">Limit</div>
+                    </div>
+                    <div class="memory-stat">
+                        <div class="memory-value" id="memoryPercent">0%</div>
+                        <div class="memory-label">Kihasználtság</div>
+                    </div>
+                    <div class="memory-stat">
+                        <div class="memory-value" id="cleanupCount">0</div>
+                        <div class="memory-label">Tisztítások</div>
+                    </div>
+                </div>
+                <div class="memory-bar">
+                    <div class="memory-usage" id="memoryBar"></div>
+                </div>
+                <div class="cleanup-alert" id="cleanupAlert">
+                    🚨 Magas memóriahasználat! Automatikus tisztítás aktív...
+                </div>
+                <div style="text-align: center; font-size: 12px; color: #a5b4fc; margin-top: 10px;">
+                    ⚡ Automatikus tisztítás: 70% felett | 🔄 Manuális: 
+                    <button id="manualCleanup" style="padding: 4px 8px; font-size: 10px; margin-left: 5px;">Kényszerített Tisztítás</button>
+                </div>
+            </div>
+
+            <!-- Stealth Monitor -->
+            <div class="stealth-monitor">
+                <div style="text-align: center; color: #ffd93d; margin-bottom: 10px;">
+                    🕵️‍♂️ Fejlett Anti-Detekció Monitor - Manuális Mód
+                </div>
+                <div class="stealth-metrics">
+                    <div class="stealth-metric">
+                        <span>Stratégia:</span>
+                        <span id="currentStrategy">manual</span>
+                    </div>
+                    <div class="stealth-metric">
+                        <span>User Agent:</span>
+                        <span id="currentUA">Stable</span>
+                    </div>
+                    <div class="stealth-metric">
+                        <span>Időzóna:</span>
+                        <span id="currentTZ">Local</span>
+                    </div>
+                    <div class="stealth-metric">
+                        <span>Playback Profile:</span>
+                        <span id="currentProfile">Manual</span>
+                    </div>
+                </div>
+                <div class="stealth-status" id="stealthStatus">
+                    ✅ Anti-Detekció aktív - Manuális mód
+                </div>
+            </div>
+
+            <!-- Fő vezérlők -->
+            <div class="controls">
+                <button class="load-btn" id="loadBatchButton">
+                    📥 Batch Betöltése
+                </button>
+                <button class="graceful-btn" id="gracefulShutdownButton">
+                    🕐 Graciális Leállás (5-8 perc)
+                </button>
+                <button class="stop-btn" id="stopButton">
+                    ⏹️ Minden Leállítása
+                </button>
+            </div>
+
+            <!-- Timer -->
+            <div class="timer-container">
+                <div class="timer" id="timer">--:--</div>
+                <div class="timer-label" id="timerLabel">Manuális mód - Nincs időzítés</div>
+            </div>
+
+            <!-- Batch progress -->
+            <div class="batch-progress" id="batchProgressContainer">
+                <!-- Dinamikusan generálódik -->
+            </div>
+            
+            <!-- Batch betöltés gomb -->
+            <div class="batch-controls">
+                <button class="load-btn" id="nextBatchButton">
+                    🔄 Következő Batch Betöltése
+                </button>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="readyCount">0</div>
+                    <div class="stat-label">Betöltött Player-ek</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="activeCount">0</div>
+                    <div class="stat-label">Aktív Videók</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalCount">389</div>
+                    <div class="stat-label">Összes Zóna</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="currentBatch">-</div>
+                    <div class="stat-label">Aktív Batch</div>
+                </div>
+            </div>
+
+            <!-- Progress bar -->
+            <div class="progress-container">
+                <div class="progress-bar" id="loadProgress"></div>
+            </div>
+
+            <!-- Playback statistics -->
+            <div class="playback-stats">
+                <div class="playback-title">📊 Lejátszás Statisztikák</div>
+                <div class="playback-info">
+                    <div id="playbackCount">Összes lejátszás: 0</div>
+                    <div id="monthlyStats">Havi bontás:</div>
+                </div>
+            </div>
+
+            <!-- Ujjlenyomat információk -->
+            <div class="fingerprint-info" id="fingerprintInfo">
+                Ujjlenyomat generálva minden videóhoz
+            </div>
+
+            <!-- Status üzenet -->
+            <div class="status" id="statusMessage">
+                Kattints a "Batch Betöltése" gombra a videók megjelenítéséhez!
+            </div>
+
+            <!-- Loading -->
+            <div class="loading" id="loadingMessage" style="display: none;">
+                Player-ek betöltése folyamatban...
+            </div>
+
+            <!-- Videós Player Konténer - WEBOLDAL RÉSZEKÉNT -->
+            <div class="video-container">
+                <div class="video-title">🎬 Videók - Kézi indítással</div>
+                <div class="video-grid" id="videoGrid">
+                    <!-- Videók ide kerülnek dinamikusan -->
+                </div>
+            </div>
+
+            <p class="tip">
+                ✅ 389 zóna dinamikus batch-ekben (60-80 zóna/batch)<br>
+                🖱️ Manuális indítás - minden videót kézzel kell indítani<br>
+                📥 Batch-ek manuális betöltése - gombnyomásra<br>
+                🎬 Videós player-ek - reklámok aktívak<br>
+                💰 Reklám bevétel követés - becsült jövedelem<br>
+                🛡️ Viselkedés Monitor - valós idejű kockázatértékelés<br>
+                🧠 Memória Monitor - automatikus tisztítás 70% RAM felett<br>
+                🕵️‍♂️ Fejlett Anti-Detekció - YouTube algoritmus elől való elrejtőzés<br>
+                📊 Statisztikák - lejátszások számának nyomonkövetése<br>
+                🔀 Linkek véletlenszerű keverése minden ciklus után<br>
+                🌐 Böngésző ujjlenyont manipuláció<br>
+                🔍 Fejlett diagnosztikai rendszer - Valós idejű debug<br>
+                🕐 Új: Graciális leállás - 5-8 perces visszaszámlálás<br>
+                🔑 Új: Egyedi ujjlenyomat generálás minden videóhoz<br>
+                🛡️ Új: Profi Hacker Védelmi Rendszer - IP rotáció, traffic titkosítás<br>
+                🌍 Új: Geolokáció maszkolás, időzóna manipuláció<br>
+                📱 Új: Eszköz szimuláció, User Agent randomizálás<br>
+                🔒 Új: WebRTC blokkolás, Canvas fingerprint spoofing
+            </p>
+        </div>
+    </div>
+
+    <!-- YouTube IFrame API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    
+    <script>
+        // ========== BELÉPÉSI RENDSZER ==========
+        const VALID_USERNAME = "Zonebooster";
+        const VALID_PASSWORD = "Newmate@1989";
+        
+        // Belépés ellenőrzése
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('error-message');
+            
+            if (username === VALID_USERNAME && password === VALID_PASSWORD) {
+                // Sikeres belépés
+                document.getElementById('login-section').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                document.body.className = 'main-body';
+            } else {
+                // Sikertelen belépés
+                errorMessage.style.display = 'block';
+                document.getElementById('password').value = '';
+            }
+        });
+
+        // ========== MANUÁLIS VEZÉRLÉS KONFIGURÁCIÓ ==========
+        const MANUAL_CONTROL_CONFIG = {
+            // Batch méret véletlenszerűség
+            BATCH: {
+                MIN_SIZE: 60,
+                MAX_SIZE: 80,
+                TARGET_TOTAL: 389
+            },
+            // Graciális leállás időtartam
+            GRACEFUL_SHUTDOWN: {
+                MIN_DURATION: 5 * 60 * 1000, // 5 perc
+                MAX_DURATION: 8 * 60 * 1000  // 8 perc
+            }
+        };
+
+        // Memória konfiguráció
+        const MEMORY_CONFIG = {
+            CLEANUP_THRESHOLD: 0.7,  // 70% - automatikus tisztítás küszöb
+            MONITOR_INTERVAL: 2000,  // 2 másodperc - memória ellenőrzés
+            AGGRESSIVE_CLEANUP: true // Agresszív tisztítás engedélyezése
+        };
+
+        // Profi védelmi konfiguráció
+        const ADVANCED_PROTECTION_CONFIG = {
+            IP_ROTATION_INTERVAL: 30000, // 30 másodperc
+            USER_AGENT_ROTATION_INTERVAL: 45000, // 45 másodperc
+            TRAFFIC_SIMULATION_INTERVAL: 15000, // 15 másodperc
+            FINGERPRINT_ROTATION_INTERVAL: 60000 // 60 másodperc
+        };
+
+        // Összes YouTube video ID - 389 link!
+        let allYouTubeLinks = [
+            "cMp-R_FqtQA", "aZgSNIe6cBY", "bOopMi29kRY", "tYuYJ1hIsi8", "4-WtHjXLNCo",
+            "-uhGPF_cgOk", "kWDoWMdbGMA", "ZVWzoHpir5U", "orylSDsIgnI", "wn73hwpvW8A",
+            "l9pltc3Hb9I", "hCZLWDi2IR8", "cwOHVbr7Vkc", "BvHsut1cDYk", "pzp6QRNMeXE",
+            "AVZjk1IO1nM", "Czg-kJ0bi7U", "F3hjmIFCIis", "TTEP3yTfN3E", "UWIVJzuN640",
+            "6_bL4LYsap8", "VEpxpFGuCzc", "rWKMZRJw9Co", "OIKfpX9MOUw", "VzNrZ-62n7E",
+            "f8BCZZl6Vzw", "6bT_V7GV2t4", "YrUiKHPuHwI", "bcQypBjDoYY", "6a8_VRHJByQ",
+            "nB-GkX4Bjr8", "8CMER1ePJ3E", "TfwdiIKHsuA", "mXD8IEpOi3Y", "KBY-LTyNtUo",
+            "UTiYkI2MkJs", "1v6lzdZajrc", "xbEAO9qyU9A", "qH5kYkXbjGM", "OcCyAFWm4fA",
+            "PKXWWamkWns", "wfa75c14lLM", "7HragoeZlOA", "jOD9SMgq9-c", "fZCExIFptRg",
+            "qfWPq0U_2jM", "vnGMYPNxIN8", "-TNgmGmN0Ak", "smUEglbjtqM", "nZl84m9n6Gk",
+            "E4-lYY-DPkw", "8GxdKF15a6k", "L-gwG1wZLDQ", "pvnL2LSabeg", "3fFB3dhajLM",
+            "zvZrZ76aBnY", "ShkG6Ph2oiE", "3dl7fSt2oCA", "rSxwTDNwdQs", "Twfx_0KXmjY",
+            "l8y9-J7WCwg", "xLF3inAjywY", "W-QW_w3vPO0", "aV78cB-YKdM", "kua-4tBkvfM",
+            "iUWLkoPFqgc", "9TVFHnk5hlA", "fPz9CctBNOs", "v3HDlcXnPpg", "hHDB_gTuCOc",
+            "epi-kCVvNSo", "alVH5TBswfA", "8fzcEY2JjyQ", "f1AUwkaBJXE", "W-PvCCMijMs",
+            "ppJmqLHXSQI", "4xuAWpUtmq0", "Ot7vtGtTM-I", "F_6GiGlsOBI", "ot9Bilqh6lA",
+            "Plfh8_bcdIY", "MUtUxi1L2jLg", "qLD50U4kIJQ", "kfLNXrYzRio", "Ckl-9Cp_F6I",
+            "IleqlrxKbac", "ia43xYLjEx8", "ULsVGPcBEAw", "6GZ39I1WgX4", "n9aHRHX0Jwo",
+            "nVYF-WJE6to", "R8YcpZ-klGM", "jpEbpRzMZS0", "CzJgrJhfvJA", "BJOKOxwZ8hQ",
+            "7JJ_NOmnTNI", "xeXUl0ZGfek", "1PrTEj-czks", "nYl9il7yTXM", "fC0cIXaDQdk",
+            "U26VU5Bq7gk", "xk6aEaZ-mrU", "UkoJCiNSwEs", "Pg8qP1s8Gpg", "5MxuWu1hsyM",
+            "4DaZRhtX7ts", "wOzT4ICTdco", "kkylvlj19a0", "Ca-FRketiu4", "edjjza1Y7x4",
+            "U3yTAJ65cL0", "tHryixWXpBs", "eOnVbSrztWA", "MGH7AFeLACU", "n8DPv_yBLtM",
+            "uSEpqSwrc1M", "AL9MvIHB2uE", "8ILwT6Gnr_I", "ce1VElw5KRA", "_rCRLWI7uUo",
+            "FKpruWSbVsU", "7raYc91KZPM", "cz5pPNaVu-A", "miQhliUeR-4", "j-ph59b0mrc",
+            "ENBk4K758Dg", "vmqV2tvgTWo", "T2OqXKZFPgs", "G_ApRDmrT-Y", "eWRAaYNtvvQ",
+            "aQkOJM-zBC4", "Iwe6P8aMhW4", "ymHm_38NOaY", "E1IB3QPnXeA", "aUPqrJqrZPk",
+            "UhsN-0Z8Has", "Cq-QPIhqPkw", "ZWM_OPb11ZY", "MWJ9bdu8qUM", "_eJ1TirnY7g",
+            "V4jJhIbQBI8", "ebPXXmEO7mo", "HSRDp4-MLwY", "q2NiGxkMKSU", "9t_nPX-jDVk",
+            "xIeh_KOmAEs", "vNfpqoZL1p4", "nB8UiZYmUR0", "P_RFdkMLNt8", "KSjTDGYeyjk",
+            "bprGVaExyO8", "qZAOYVUf0Vg", "Z-jW7u0ZSkI", "BRNcjrv2VtE", "SutVma3u32E",
+            "WUt_8NWLOik", "3L5sV8vncmg", "PKl82l6Dt3w", "w3rGzFxCWgw", "qYaGwpp8w_0",
+            "8E3IBzQO7jo", "w-2_5BXUUqI", "d_YAD8dSDzw", "NVkO1_HE6iE", "-OK4AlPcoJs",
+            "CI0PRetRoE0", "X9zo5S1hLhE", "GAGtZysIsw8", "vNqlAEZy3IE", "5V_2MqMyPow",
+            "J8vu_NW4sdw", "wGXbZDnG9oc", "IOOYwxxRe_A", "EhbI07Zpk_A", "6lObl0ZdB4o",
+            "VT2NheI5AX8", "xdfsqe0WITw", "eoPqxCR9uGQ", "SdC1xTRMNfc", "bQy70JcwAyY",
+            "d6xtVsMGtww", "qqymyxP4AYw", "ectTCvuDH6k", "vmR-9g4FhZs", "S8fI4KPhw3o",
+            "CAvCQZLJ3Uk", "Xy4yD5pIqZQ", "EpWqbIZHUko", "wwmKBpfyMNc", "a_tIFBNQ070",
+            "ztAT5yD1yLw", "cfCjQFuj8bY", "cvhU_mq87Qc", "XE-Wz9Zmtko", "-QAlRoe2OTE",
+            "-aKvjO-FpSM", "6BmSFvK5djk", "a1qs6498g_A", "ysbA3S0epuI", "SQy3zeux_-c",
+            "OzY7kI5xOpc", "lr-xfRQorms", "OHSNjX5eCwI", "u1l_vNVyOjI", "ve8BI7w025Q",
+            "No3abRpVc68", "SVBelCAslmM", "0js8o0YFyo0", "FuHSXTbKnCU", "UjnzrjOORh0",
+            "AumZpXXeJ2I", "mt_Fy6iwHtI", "WP_YMq_izyE", "7ozh91sg0-M", "-uYvT9ApPr0",
+            "M_xfPV1TP2Y", "32PdaIJw_CI", "Twfx_0KXmjY", "f7uwKg3uiEI", "F8r42kkh-tM",
+            "lIXSe9tvn_A", "lJjRQCOgMwQ", "yRUVMRIyeQA", "3NaCBWzRqok", "KFmmJDmiFBQ",
+            "m2iSVowniXg", "LgmzYLj0e9E", "b5Qyej_NeEI", "zzzWHpkPFbM", "amEeugZXGQg",
+            "WZiQjdjWw58", "jSksZT3jwl4", "skuE9unvAPo", "WPvjMFOhXtc", "oQHvIX2TkFs",
+            "TQcG5kSI_s8", "yqzgMqdDcHw", "CvumcA54M6s", "Sg3E3Nv6ldY", "iJoGzA0wtlo",
+            "vTeSgrKhDQw", "brE4aQAdgi8", "EJtThjzjldM", "CnTFDgE1gec", "gJMqMPnOU94",
+            "5cO0fx09eoE", "UBNYYTFCCD8", "NsgDJ6ufaho", "fsZGq-4qJng", "o5DsOdSZP5k",
+            "rHwRFhRMb5w", "quSgniKvxuY", "O55cCp4jNLM", "1cSuzphxi8c", "cWb0Io3wKVs",
+            "AADSvz6ckz8", "GIsP_4w7gCE", "i2X4y-Kx6XM", "13DRS3Mqxc4", "yrA5Al5y20U",
+            "CEHOTp9ACkI", "WiDQhUaUP80", "mGU7grNdizo", "P61S0x2cAOM", "nWG4sxZsTFo",
+            "ea3PCQK6QME", "zo18xABy4AI", "0LXByPMRdhY", "X0Tl_iJF3-o", "1iWt5EWNfHM",
+            "0cnBEAig9yM", "2IWT3SFhGIQ", "V8kKOQCSxHE", "AVJSQuRa5RM", "0W2DDXbrYx4",
+            "qttDZyNuDyc", "S_DBaArmXM8", "oo5zAjRolMs", "nhx4sNtOY28", "JYGyBpWs2Xw",
+            "E5gx3dPomrg", "1vhNDygrN9Q", "Gd4MvlUosuc", "7NGuG54EhTc", "RzJ27Kx7bxw",
+            "Rcqe7cGa-FI", "3BSLzWRXz5s", "D-P4Fm6b4zg", "fjFEGCnCF04", "BDvZOVrTOjM",
+            "6Uqg0R1V_yQ", "iajcLSonbW0", "2-3SQhkyVAE", "V73SeV5T2t0", "vfosnIxVC6I",
+            "M3fKb_qypzw", "DfhRsyhuXYY", "S1vew5sFMBY", "1YNtZ7jv5X8", "_TUSYYcJJo8",
+            "20OPEnUOgTM", "FcylxgJRV8A", "woOrP4ODNrc", "d-6UYtQTWuU", "K2fIiTZY7aE",
+            "kR_FfvtTRRQ", "Qi_VxYnhSe0", "b7KWWnOEN9o", "TxfZN5kkGNA", "4ue1cf6bm1U",
+            "eRJj_bMz8uc", "qj5K2fGlL4s", "CFupVR_6QQM", "48Yle_F4CDM", "Nflyj2GTcxk",
+            "30Tp6mDlruo", "UP8OuUoCjoQ", "b-DHemNvyWM", "VqCH4IrWkcg", "eYmWdJM1fXo",
+            "EGiA648irw8", "9HcB8rM-l9k", "Ze_rF168Qgw", "enUHpqdjBXA", "ByIccEjGhio",
+            "gDe3W4sTeYk", "ao4cUUDzGWE", "fjXzxotZ_Zg", "9IHdWhSMJpA", "O4X-itUd124",
+            "9Lo7jUSMsZ4", "IpqnRi4Mm9M", "9NKhe80947A", "8GwyHTPvZg8", "UV3-_TupXRM",
+            "J9CqUnr5mjQ", "4XRm0NUb2BI", "otXyjpkODVQ", "SU1neRnrbxA", "CZt3vYstA68",
+            "75z2XetOiJI", "iQn8uPP4P2Y", "tcd_1eLsQl4", "ltTVPgMNCeQ", "SNE6WzUYc0A",
+            "O6s9WJBxEi0", "yal0HoeQCMc", "RxIqReGbml4", "VP6El8jvlJw", "Oa7n-0s0QNY",
+            "hmnBN1_WlrQ", "UW9zBXoxNY4", "PvGsdIZ50J8", "KJpG0cZy-Fw", "8AU2yYeQmx8",
+            "0cixI-eAL9I", "vpiSeiOheU0", "N_JzHl0uxNU", "C5ZeGUOWWCE", "TyLUKUZgDmY",
+            "-H-__l8CcKU", "TMVjJHIp5-g", "q-8oyMD-3YQ", "kegasmqaq6E", "OiE6gaLGuCQ",
+            "4EBBl9IlovU", "BMTAC3xBqyg", "1bcJu7ofC-Q", "xTMU5q5R2mA", "bx0Qt6rjxIg",
+            "faM25qwtJ20", "jkyJpPJ_dNk", "0OpOzFZ8440", "9dt7V2d6hQc", "8eMMV-gdDgQ",
+            "qxDs9jkPAxo", "fyMW9dT6PUI", "EfsoOpbh_nI", "axEHqzwdiiI", "az79_vFF8Cs",
+            "ExR0p2VCtPI", "Gf8IveD8YqY", "VJ7aEJTxQ1E", "XqrHwpxLpko", "t8ulrBBgVw0",
+            "S7YOvummsqo", "ag1K6tU56bA", "mr2nutBPpkQ", "aJoIaVUK8uE", "Ljc4nFmA5Aw",
+            "-hH1uSXXC28", "u6dzPVqwFEE", "oPjqt2E2CTw", "zDM5S98lbRY", "KY-pRea41xc",
+            "3f8IO2e5D6E", "7k-WWVMpcdA", "WJ_PkfAytyM", "QbxDNXgCX7E", "PAfBiqiBjCU",
+            "8xE8AqyLMS0", "M40_IApObCo", "3xUk91W_FWU", "jVnjIIC3ATY", "cnA7YmepUiA",
+            "XmkcnTeL0Q0", "hiq33dPmTBM", "XjVz4ztJdSk", "607GsFWcn_U", "LRkHvV75LbY",
+            "qaClTvvBbLg", "nhMUOBzlzEo", "Zjjb6UCDjos", "1xnKwv38IIc", "v8ijjUh2-Ww",
+            "BhBzixHMdOE", "jQAXQ2ljlLE", "nNJN8wnSwWE", "lfmLv56uNOk", "7yajO2dbIbs",
+            "XB9HV96Y3OM", "69aUZWahu3Q", "PtsBijAUqiE", "X3Sj74eFuo8", "ZcNGMoj9KZw",
+            "L9qozw78_7I", "p_EFoBQynKc", "k1wnrXeIhjo", "ithmHO7zZVI", "kgr-NiCNrY8",
+            "IhzRncJo6lE", "ElgF6FCiGI4", "l5epGxTQnzA", "6NAEhZnbNgQ", "LQKwIG1XJ9Q",
+            "GKoLWKEURjw", "g_HD8IkH_iI", "OodroBam7Kk", "7f2gfS0dGmo", "G0LL06I254U",
+            "iTCVDL-FNzE", "PutRXdLNJY8", "Tst3uPVsGZI", "5WwRIzOVKT8", "_cuTCzHF-4I",
+            "Qpka-DQTovI", "boDC_kOK5TY", "ZWeN8EHbMaA", "fAz3665jgEM", "JWPO6BpvQrE",
+            "0Awu6_UW3J0", "hNeDBHOy6fo", "Q-BDuX13ukY", "Gs9MZL73VVY", "3Qz5UZ9YByM",
+            "nmPn747Pke8", "Q3TKlcf9tGk", "TBmvveW2yJk", "O9-Y1ND4NQc", "izBAI8IaTy8",
+            "GorzyRBNhZM", "P5xIBQj05Tg", "nssqiGPy4_E", "PKbpcnnzuw0", "HkK9CvD9z00",
+            "LFFUSqsmqvo", "FGrayRlYvMo", "cZgHIcEXDY8", "TTCLh8C938Q", "pPp40rLjZ1g",
+            "EtiYmLhcsNg", "7AVDaTOJU94", "7W1r3NCwfVI", "Maeu07NPLY4", "YuU5YtWAhDw",
+            "rJuFqF14A-c", "4Nw37OGHd0s", "PPfT7NiGscA", "r6NDDLdePng", "KnNV4CoRPzU",
+            "xZcZ2aM6rhs", "kmIbtT04X6A", "5n8ImtckRUM", "zDYwMZMwc4M", "VLzxU2pi1ck",
+            "P4rQpJX1Qzs", "0rNJ6FxjmYU", "-mFUKGYbnEM"
+        ];
+
+        // Dinamikus batch generálás
+        function generateDynamicBatches() {
+            let batches = [];
+            let remainingZones = MANUAL_CONTROL_CONFIG.BATCH.TARGET_TOTAL;
+            let batchNumber = 1;
+            
+            while (remainingZones > 0) {
+                // Véletlenszerű batch méret
+                const maxBatchSize = Math.min(MANUAL_CONTROL_CONFIG.BATCH.MAX_SIZE, remainingZones);
+                const minBatchSize = Math.min(MANUAL_CONTROL_CONFIG.BATCH.MIN_SIZE, remainingZones);
+                
+                const batchSize = Math.floor(
+                    Math.random() * (maxBatchSize - minBatchSize + 1)
+                ) + minBatchSize;
+                
+                const startIndex = batches.reduce((sum, batch) => sum + batch.size, 0);
+                const endIndex = startIndex + batchSize - 1;
+                
+                batches.push({
+                    start: startIndex,
+                    end: endIndex,
+                    size: batchSize,
+                    name: `${batchNumber}. Batch`,
+                    duration: 0 // Nincs időzítés
+                });
+                
+                remainingZones -= batchSize;
+                batchNumber++;
+            }
+            
+            return batches;
+        }
+
+        // Linkek véletlenszerű keverése
+        function shuffleYouTubeLinks() {
+            console.log('🔀 YouTube linkek keverése...');
+            
+            for (let i = allYouTubeLinks.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [allYouTubeLinks[i], allYouTubeLinks[j]] = [allYouTubeLinks[j], allYouTubeLinks[i]];
+            }
+            
+            document.getElementById('statusMessage').innerHTML = 
+                '🔀 Linkek újra keverve!';
+            
+            updateStats();
+        }
+
+        // Dinamikus batch-ek
+        let batches = generateDynamicBatches();
+
+        let youtubePlayers = new Array(allYouTubeLinks.length);
+        let playersReady = 0;
+        let activePlayers = 0;
+        let currentBatchIndex = -1;
+        let isLoading = false;
+        let cycleCount = 0;
+        
+        // Lejátszási statisztikák
+        let playbackStats = {
+            totalPlaybacks: 0,
+            monthlyStats: {}
+        };
+
+        // Reklám statisztikák
+        let adStats = {
+            totalAds: 0,
+            successfulAds: 0,
+            estimatedRevenue: 0,
+            adEvents: []
+        };
+
+        // Kockázatértékelés
+        let riskAssessment = {
+            patternScore: 0,
+            timingScore: 0,
+            behaviorScore: 0,
+            totalScore: 0,
+            lastUpdate: Date.now()
+        };
+
+        // Memória monitor
+        let memoryStats = {
+            cleanupCount: 0,
+            lastCleanup: null,
+            totalMemoryFreed: 0,
+            monitoringActive: true
+        };
+
+        // Graciális leállás változók
+        let gracefulShutdownActive = false;
+        let gracefulShutdownTimer = null;
+        let gracefulShutdownEndTime = null;
+        let gracefulShutdownInterval = null;
+
+        // Ujjlenyomat generálás
+        let currentFingerprint = null;
+        let fingerprintCount = 0;
+
+        // ========== PROFIL HACKER VÉDELEM ==========
+
+        // IP rotáció szimuláció
+        let currentIP = "192.168.1.1";
+        let requestCount = 0;
+        let sessionStartTime = Date.now();
+
+        // IP cím generálás
+        function generateRandomIP() {
+            return `${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`;
+        }
+
+        // IP rotáció
+        function rotateIP() {
+            currentIP = generateRandomIP();
+            document.getElementById('currentIP').textContent = currentIP;
+            console.log(`🔄 IP rotálva: ${currentIP}`);
+        }
+
+        // User Agent randomizálás
+        function rotateUserAgent() {
+            const userAgents = [
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Safari/605.1.15',
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0',
+                'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36',
+                'Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1'
+            ];
+            
+            const randomUA = userAgents[Math.floor(Math.random() * userAgents.length)];
+            Object.defineProperty(navigator, 'userAgent', {
+                value: randomUA,
+                configurable: true
+            });
+            
+            document.getElementById('currentUA').textContent = randomUA.substring(0, 30) + '...';
+            console.log('🔄 User Agent rotálva');
+        }
+
+        // Időzóna manipuláció
+        function manipulateTimezone() {
+            const timezones = ['Europe/Budapest', 'America/New_York', 'Asia/Tokyo', 'Australia/Sydney', 'Europe/London'];
+            const randomTZ = timezones[Math.floor(Math.random() * timezones.length)];
+            
+            // Szimuláljuk az időzóna változást
+            document.getElementById('currentTZ').textContent = randomTZ;
+            console.log(`🕐 Időzóna manipulálva: ${randomTZ}`);
+        }
+
+        // Canvas fingerprint spoofing
+        function spoofCanvasFingerprint() {
+            const originalGetImageData = CanvasRenderingContext2D.prototype.getImageData;
+            CanvasRenderingContext2D.prototype.getImageData = function() {
+                const result = originalGetImageData.apply(this, arguments);
+                // Módosítjuk a canvas adatokat véletlenszerűen
+                for (let i = 0; i < result.data.length; i += 4) {
+                    result.data[i] = result.data[i] + Math.floor(Math.random() * 10) - 5;
+                }
+                return result;
+            };
+            console.log('🎭 Canvas fingerprint spoofing aktív');
+        }
+
+        // WebRTC blokkolás
+        function blockWebRTC() {
+            // WebRTC IP lekérdezések blokkolása
+            const originalRTCPeerConnection = window.RTCPeerConnection;
+            window.RTCPeerConnection = function(...args) {
+                console.log('🔒 WebRTC kérés blokkolva');
+                return null;
+            };
+            window.RTCPeerConnection.prototype = originalRTCPeerConnection.prototype;
+            console.log('🔒 WebRTC blokkolva');
+        }
+
+        // Traffic titkosítás szimuláció
+        function simulateTrafficEncryption() {
+            requestCount++;
+            document.getElementById('requestCount').textContent = requestCount;
+            
+            // Szimuláljuk a titkosított forgalmat
+            console.log(`🔒 Titkosított kérés #${requestCount} küldve IP: ${currentIP}`);
+        }
+
+        // Eszköz szimuláció
+        function simulateDevice() {
+            const devices = [
+                { type: 'Desktop', width: 1920, height: 1080 },
+                { type: 'Laptop', width: 1366, height: 768 },
+                { type: 'Tablet', width: 768, height: 1024 },
+                { type: 'Mobile', width: 375, height: 667 }
+            ];
+            
+            const randomDevice = devices[Math.floor(Math.random() * devices.length)];
+            
+            // Szimuláljuk az eszköz adatokat
+            Object.defineProperty(screen, 'width', { value: randomDevice.width });
+            Object.defineProperty(screen, 'height', { value: randomDevice.height });
+            
+            console.log(`📱 Eszköz szimulálva: ${randomDevice.type} (${randomDevice.width}x${randomDevice.height})`);
+        }
+
+        // Geolokáció maszkolás
+        function maskGeolocation() {
+            if (navigator.geolocation) {
+                const originalGetCurrentPosition = navigator.geolocation.getCurrentPosition;
+                navigator.geolocation.getCurrentPosition = function(success, error, options) {
+                    // Hamis geolokációs adatok
+                    const fakePosition = {
+                        coords: {
+                            latitude: 40.7128 + (Math.random() - 0.5) * 10,
+                            longitude: -74.0060 + (Math.random() - 0.5) * 10,
+                            accuracy: 1000
+                        },
+                        timestamp: Date.now()
+                    };
+                    
+                    if (success) success(fakePosition);
+                };
+                
+                console.log('🌍 Geolokáció maszkolva');
+            }
+        }
+
+        // Session idő frissítése
+        function updateSessionTime() {
+            const now = Date.now();
+            const elapsed = now - sessionStartTime;
+            const minutes = Math.floor(elapsed / 60000);
+            const seconds = Math.floor((elapsed % 60000) / 1000);
+            
+            document.getElementById('sessionTime').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Profi védelmi rendszer indítása
+        function startAdvancedProtection() {
+            console.log('🛡️ Profi hacker védelmi rendszer indítása...');
+            
+            // IP rotáció
+            setInterval(rotateIP, ADVANCED_PROTECTION_CONFIG.IP_ROTATION_INTERVAL);
+            
+            // User Agent rotáció
+            setInterval(rotateUserAgent, ADVANCED_PROTECTION_CONFIG.USER_AGENT_ROTATION_INTERVAL);
+            
+            // Időzóna manipuláció
+            setInterval(manipulateTimezone, 60000);
+            
+            // Traffic szimuláció
+            setInterval(simulateTrafficEncryption, ADVANCED_PROTECTION_CONFIG.TRAFFIC_SIMULATION_INTERVAL);
+            
+            // Session idő frissítés
+            setInterval(updateSessionTime, 1000);
+            
+            // Canvas fingerprint spoofing
+            spoofCanvasFingerprint();
+            
+            // WebRTC blokkolás
+            blockWebRTC();
+            
+            // Eszköz szimuláció
+            simulateDevice();
+            
+            // Geolokáció maszkolás
+            maskGeolocation();
+            
+            console.log('✅ Profi hacker védelmi rendszer aktív');
+        }
+
+        // ========== UJJLENYOMAT GENERÁLÁS ==========
+
+        // Böngésző ujjlenyomat generálása
+        function generateFingerprint() {
+            const components = {
+                userAgent: navigator.userAgent,
+                language: navigator.language,
+                languages: navigator.languages ? navigator.languages.join(',') : '',
+                platform: navigator.platform,
+                hardwareConcurrency: navigator.hardwareConcurrency || 'unknown',
+                deviceMemory: navigator.deviceMemory || 'unknown',
+                screenResolution: `${screen.width}x${screen.height}`,
+                colorDepth: screen.colorDepth,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                sessionStorage: !!window.sessionStorage,
+                localStorage: !!window.localStorage,
+                indexedDB: !!window.indexedDB,
+                touchSupport: 'ontouchstart' in window,
+                canvasFingerprint: generateCanvasFingerprint(),
+                webglFingerprint: generateWebGLFingerprint(),
+                audioFingerprint: generateAudioFingerprint(),
+                plugins: getPluginsFingerprint(),
+                fonts: getFontsFingerprint()
+            };
+
+            // Hash generálása a komponensekből
+            const fingerprintString = JSON.stringify(components);
+            const fingerprintHash = simpleHash(fingerprintString);
+            
+            fingerprintCount++;
+            document.getElementById('fingerprintCount').textContent = fingerprintCount;
+            
+            return {
+                hash: fingerprintHash,
+                components: components,
+                timestamp: Date.now()
+            };
+        }
+
+        // Egyszerű hash függvény
+        function simpleHash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash; // Convert to 32bit integer
+            }
+            return Math.abs(hash).toString(16);
+        }
+
+        // Canvas fingerprint
+        function generateCanvasFingerprint() {
+            try {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = 200;
+                canvas.height = 50;
+                
+                ctx.textBaseline = 'top';
+                ctx.font = '14px Arial';
+                ctx.fillStyle = '#f60';
+                ctx.fillRect(125, 1, 62, 20);
+                ctx.fillStyle = '#069';
+                ctx.fillText('Browser Fingerprint', 2, 15);
+                ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
+                ctx.fillText('Browser Fingerprint', 4, 17);
+                
+                return canvas.toDataURL();
+            } catch (e) {
+                return 'error';
+            }
+        }
+
+        // WebGL fingerprint
+        function generateWebGLFingerprint() {
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                
+                if (!gl) return 'no-webgl';
+                
+                const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                const vendor = gl.getParameter(debugInfo ? debugInfo.UNMASKED_VENDOR_WEBGL : gl.VENDOR);
+                const renderer = gl.getParameter(debugInfo ? debugInfo.UNMASKED_RENDERER_WEBGL : gl.RENDERER);
+                
+                return `${vendor}-${renderer}`;
+            } catch (e) {
+                return 'error';
+            }
+        }
+
+        // Audio fingerprint
+        function generateAudioFingerprint() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const analyser = audioContext.createAnalyser();
+                
+                oscillator.connect(analyser);
+                oscillator.type = 'triangle';
+                oscillator.frequency.setValueAtTime(1000, audioContext.currentTime);
+                
+                const data = new Float32Array(analyser.frequencyBinCount);
+                analyser.getFloatFrequencyData(data);
+                
+                return data.join(',');
+            } catch (e) {
+                return 'error';
+            }
+        }
+
+        // Plugin információk
+        function getPluginsFingerprint() {
+            const plugins = [];
+            for (let i = 0; i < navigator.plugins.length; i++) {
+                plugins.push(navigator.plugins[i].name);
+            }
+            return plugins.join(',');
+        }
+
+        // Font információk
+        function getFontsFingerprint() {
+            const fonts = [
+                'Arial', 'Arial Black', 'Arial Narrow', 'Times New Roman',
+                'Courier New', 'Verdana', 'Comic Sans MS', 'Tahoma',
+                'Trebuchet MS', 'Georgia', 'Palatino', 'Impact'
+            ];
+            
+            const availableFonts = [];
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            
+            fonts.forEach(font => {
+                context.font = '72px ' + font + ', monospace';
+                const text = 'abcdefghijklmnopqrstuvwxyz';
+                const width1 = context.measureText(text).width;
+                context.font = '72px monospace';
+                const width2 = context.measureText(text).width;
+                
+                if (width1 !== width2) {
+                    availableFonts.push(font);
+                }
+            });
+            
+            return availableFonts.join(',');
+        }
+
+        // Ujjlenyomat frissítése minden videó indításakor
+        function updateFingerprintForVideo(videoIndex) {
+            currentFingerprint = generateFingerprint();
+            
+            // Ujjlenyomat információk megjelenítése
+            document.getElementById('fingerprintInfo').innerHTML = 
+                `🔑 Videó ${videoIndex + 1} ujjlenyomata: ${currentFingerprint.hash.substring(0, 16)}...`;
+            
+            console.log(`Ujjlenyomat generálva videó ${videoIndex + 1}-hez:`, currentFingerprint);
+        }
+
+        // ========== GRACIÁLIS LEÁLLÍTÁS ==========
+
+        // Graciális leállás indítása
+        function startGracefulShutdown() {
+            if (gracefulShutdownActive) return;
+            
+            // Véletlenszerű időtartam 5-8 perc között
+            const duration = Math.floor(
+                Math.random() * (MANUAL_CONTROL_CONFIG.GRACEFUL_SHUTDOWN.MAX_DURATION - 
+                MANUAL_CONTROL_CONFIG.GRACEFUL_SHUTDOWN.MIN_DURATION + 1)
+            ) + MANUAL_CONTROL_CONFIG.GRACEFUL_SHUTDOWN.MIN_DURATION;
+            
+            gracefulShutdownActive = true;
+            gracefulShutdownEndTime = Date.now() + duration;
+            
+            // Graciális leállás timer megjelenítése
+            document.getElementById('gracefulTimer').style.display = 'block';
+            
+            // Timer frissítése
+            gracefulShutdownInterval = setInterval(updateGracefulTimer, 1000);
+            updateGracefulTimer();
+            
+            // Videók fokozatos leállítása
+            startGradualShutdown();
+            
+            document.getElementById('statusMessage').innerHTML = 
+                `🕐 Graciális leállás indítva! A videók fokozatosan leállnak ${Math.round(duration/1000/60)} percen belül.`;
+        }
+
+        // Graciális leállás timer frissítése
+        function updateGracefulTimer() {
+            if (!gracefulShutdownActive) return;
+            
+            const now = Date.now();
+            const remaining = gracefulShutdownEndTime - now;
+            
+            if (remaining <= 0) {
+                // Idő lejárt, mindent leállítunk
+                stopGracefulShutdown();
+                stopAll();
+                return;
+            }
+            
+            const minutes = Math.floor(remaining / 1000 / 60);
+            const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+            
+            document.getElementById('gracefulTime').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            document.getElementById('gracefulStatus').textContent = 
+                `${activePlayers} aktív videó - ${Math.round((remaining / (MANUAL_CONTROL_CONFIG.GRACEFUL_SHUTDOWN.MAX_DURATION)) * 100)}% idő maradt`;
+        }
+
+        // Videók fokozatos leállítása
+        function startGradualShutdown() {
+            if (!gracefulShutdownActive) return;
+            
+            const shutdownInterval = setInterval(() => {
+                if (!gracefulShutdownActive) {
+                    clearInterval(shutdownInterval);
+                    return;
+                }
+                
+                // Véletlenszerű időközönként leállítunk egy videót
+                const randomDelay = Math.random() * 30000 + 10000; // 10-40 másodperc
+                
+                setTimeout(() => {
+                    if (!gracefulShutdownActive || activePlayers === 0) return;
+                    
+                    // Aktív videók közül véletlenszerűen kiválasztunk egyet
+                    const activePlayerIndexes = [];
+                    for (let i = 0; i < youtubePlayers.length; i++) {
+                        if (youtubePlayers[i] && typeof youtubePlayers[i].getPlayerState === 'function') {
+                            try {
+                                const state = youtubePlayers[i].getPlayerState();
+                                if (state === YT.PlayerState.PLAYING) {
+                                    activePlayerIndexes.push(i);
+                                }
+                            } catch (e) {
+                                // Hiba esetén kihagyjuk
+                            }
+                        }
+                    }
+                    
+                    if (activePlayerIndexes.length > 0) {
+                        const randomIndex = activePlayerIndexes[Math.floor(Math.random() * activePlayerIndexes.length)];
+                        
+                        try {
+                            youtubePlayers[randomIndex].pauseVideo();
+                            
+                            // Kattintás státusz frissítése
+                            const clickStatus = document.getElementById(`clickStatus${randomIndex}`);
+                            if (clickStatus) {
+                                clickStatus.textContent = '⏸️ Graciális';
+                                clickStatus.style.background = 'rgba(255, 152, 0, 0.9)';
+                            }
+                        } catch (e) {
+                            console.log('Hiba a videó leállításánál:', e);
+                        }
+                    }
+                }, randomDelay);
+                
+            }, 5000); // 5 másodpercenként indítunk egy leállítást
+        }
+
+        // Graciális leállás megállítása
+        function stopGracefulShutdown() {
+            gracefulShutdownActive = false;
+            
+            if (gracefulShutdownInterval) {
+                clearInterval(gracefulShutdownInterval);
+                gracefulShutdownInterval = null;
+            }
+            
+            document.getElementById('gracefulTimer').style.display = 'none';
+            document.getElementById('statusMessage').innerHTML = 'Graciális leállás megállítva.';
+        }
+
+        // ========== VIDEÓS PLAYER FUNKCIÓK ==========
+
+        // Videó player létrehozása
+        function createVideoPlayer(videoId, index) {
+            const videoGrid = document.getElementById('videoGrid');
+            
+            const videoPlayer = document.createElement('div');
+            videoPlayer.className = 'video-player';
+            videoPlayer.id = `videoPlayer${index}`;
+            
+            const playerContainer = document.createElement('div');
+            playerContainer.className = 'player-container';
+            playerContainer.id = `playerContainer${index}`;
+            
+            // Kattintás esemény az ujjlenyomat frissítéséhez és videó indításához
+            playerContainer.addEventListener('click', function() {
+                updateFingerprintForVideo(index);
+                simulateTrafficEncryption();
+                
+                if (youtubePlayers[index] && typeof youtubePlayers[index].playVideo === 'function') {
+                    try {
+                        youtubePlayers[index].playVideo();
+                    } catch (e) {
+                        console.log('Hiba a videó indításánál:', e);
+                    }
+                }
+            });
+            
+            const adIndicator = document.createElement('div');
+            adIndicator.className = 'ad-indicator';
+            adIndicator.id = `adIndicator${index}`;
+            adIndicator.textContent = '⏳ Reklám';
+            adIndicator.style.display = 'none';
+            
+            const clickStatus = document.createElement('div');
+            clickStatus.className = 'click-status';
+            clickStatus.id = `clickStatus${index}`;
+            clickStatus.textContent = '🖱️ Kézi indítás';
+            clickStatus.style.background = 'rgba(255, 152, 0, 0.9)';
+            
+            const videoInfo = document.createElement('div');
+            videoInfo.className = 'video-info';
+            videoInfo.textContent = `Videó ${index + 1}`;
+            
+            videoPlayer.appendChild(playerContainer);
+            videoPlayer.appendChild(adIndicator);
+            videoPlayer.appendChild(clickStatus);
+            videoPlayer.appendChild(videoInfo);
+            videoGrid.appendChild(videoPlayer);
+            
+            return new Promise((resolve) => {
+                new YT.Player(`playerContainer${index}`, {
+                    height: '120',
+                    width: '100%',
+                    videoId: videoId,
+                    playerVars: {
+                        'playsinline': 1,
+                        'enablejsapi': 1,
+                        'origin': window.location.origin,
+                        'rel': 0,
+                        'modestbranding': 1,
+                        'controls': 1,  // Vezérlők láthatóak
+                        'showinfo': 0,
+                        'iv_load_policy': 3,
+                        'autoplay': 0,   // Nincs autoplay
+                        'fs': 0          // Teljes képernyő letiltva
+                    },
+                    events: {
+                        'onReady': function(event) {
+                            youtubePlayers[index] = event.target;
+                            playersReady++;
+                            updateStats();
+                            
+                            // Ellenőrizzük, hogy minden player betöltődött-e
+                            if (playersReady === allYouTubeLinks.length) {
+                                document.getElementById('statusMessage').innerHTML += 
+                                    '<br>✅ Player-ek betöltése kész!';
+                            }
+                            
+                            resolve(event.target);
+                        },
+                        'onStateChange': function(event) {
+                            if (event.data === YT.PlayerState.PLAYING) {
+                                activePlayers++;
+                                updateStats();
+                                
+                                // Kattintás státusz frissítése
+                                const clickStatus = document.getElementById(`clickStatus${index}`);
+                                if (clickStatus) {
+                                    clickStatus.textContent = '▶️ Lejátszás';
+                                    clickStatus.style.background = 'rgba(76, 175, 80, 0.9)';
+                                }
+                                
+                                // Lejátszás hozzáadása a statisztikákhoz
+                                addPlayback(1);
+                            } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+                                activePlayers = Math.max(0, activePlayers - 1);
+                                updateStats();
+                                
+                                // Kattintás státusz frissítése
+                                const clickStatus = document.getElementById(`clickStatus${index}`);
+                                if (clickStatus) {
+                                    if (gracefulShutdownActive) {
+                                        clickStatus.textContent = '⏸️ Graciális';
+                                    } else {
+                                        clickStatus.textContent = '⏸️ Szünet';
+                                    }
+                                    clickStatus.style.background = 'rgba(255, 152, 0, 0.9)';
+                                }
+                            }
+                            
+                            // Reklám állapot követése
+                            trackAdState(event, index);
+                        },
+                        'onError': function(event) {
+                            console.error(`Hiba a player ${index + 1}-nél:`, event.data);
+                            resolve(null);
+                        }
+                    }
+                });
+            });
+        }
+
+        // Reklám állapot követése
+        function trackAdState(event, index) {
+            const adIndicator = document.getElementById(`adIndicator${index}`);
+            
+            switch (event.data) {
+                case YT.PlayerState.AD_PLAYING:
+                    adIndicator.style.display = 'block';
+                    adIndicator.textContent = '📺 Reklám';
+                    adIndicator.style.background = 'rgba(255, 193, 7, 0.9)';
+                    adStats.totalAds++;
+                    updateAdStats();
+                    break;
+                    
+                case YT.PlayerState.PLAYING:
+                    // Ha a reklám után jön a videó, akkor sikeres reklám
+                    if (adIndicator.style.display === 'block') {
+                        adStats.successfulAds++;
+                        adStats.estimatedRevenue += 0.01; // Becsült bevétel ($0.01 per reklám)
+                        updateAdStats();
+                    }
+                    adIndicator.style.display = 'none';
+                    break;
+                    
+                case YT.PlayerState.BUFFERING:
+                    adIndicator.style.display = 'block';
+                    adIndicator.textContent = '⏳ Betöltés';
+                    adIndicator.style.background = 'rgba(33, 150, 243, 0.9)';
+                    break;
+            }
+        }
+
+        // Reklám statisztikák frissítése
+        function updateAdStats() {
+            document.getElementById('totalAds').textContent = adStats.totalAds;
+            document.getElementById('successfulAds').textContent = adStats.successfulAds;
+            document.getElementById('adRevenue').textContent = adStats.estimatedRevenue.toFixed(2);
+        }
+
+        // ========== ALAP FUNKCIÓK ==========
+
+        // Update stats
+        function updateStats() {
+            document.getElementById('readyCount').textContent = playersReady;
+            document.getElementById('activeCount').textContent = activePlayers;
+            
+            const progress = (playersReady / allYouTubeLinks.length) * 100;
+            document.getElementById('loadProgress').style.width = progress + '%';
+            
+            document.getElementById('currentBatch').textContent = currentBatchIndex >= 0 ? batches[currentBatchIndex].name : '-';
+        }
+
+        // Timer frissítése (üres manuális módban)
+        function updateTimer() {
+            document.getElementById('timer').textContent = '--:--';
+        }
+
+        // Lejátszási statisztikák frissítése
+        function updatePlaybackStats() {
+            document.getElementById('playbackCount').textContent = `Összes lejátszás: ${playbackStats.totalPlaybacks}`;
+            
+            let monthlyHTML = 'Havi bontás:<br>';
+            const months = Object.keys(playbackStats.monthlyStats).sort().reverse();
+            
+            months.forEach(month => {
+                monthlyHTML += `${month}: ${playbackStats.monthlyStats[month]} db lejátszás<br>`;
+            });
+            
+            document.getElementById('monthlyStats').innerHTML = monthlyHTML;
+        }
+
+        // Statisztikák betöltése localStorage-ból
+        function loadPlaybackStats() {
+            const savedStats = localStorage.getItem('playbackStats');
+            if (savedStats) {
+                playbackStats = JSON.parse(savedStats);
+            }
+            updatePlaybackStats();
+        }
+
+        // Statisztikák mentése localStorage-ba
+        function savePlaybackStats() {
+            localStorage.setItem('playbackStats', JSON.stringify(playbackStats));
+        }
+
+        // Lejátszás hozzáadása a statisztikákhoz
+        function addPlayback(count) {
+            playbackStats.totalPlaybacks += count;
+            
+            const now = new Date();
+            const monthKey = `${now.getFullYear()} ${getMonthName(now.getMonth())}`;
+            
+            if (!playbackStats.monthlyStats[monthKey]) {
+                playbackStats.monthlyStats[monthKey] = 0;
+            }
+            playbackStats.monthlyStats[monthKey] += count;
+            
+            updatePlaybackStats();
+            savePlaybackStats();
+        }
+
+        // Hónap neve magyarul
+        function getMonthName(monthIndex) {
+            const months = [
+                'január', 'február', 'március', 'április', 'május', 'június',
+                'július', 'augusztus', 'szeptember', 'október', 'november', 'december'
+            ];
+            return months[monthIndex];
+        }
+
+        // Batch betöltése
+        function loadPlayersFromBatch(batch) {
+            const videoGrid = document.getElementById('videoGrid');
+            videoGrid.innerHTML = ''; // Töröljük az előző batch videóit
+            
+            let currentIndex = batch.start;
+            let errorCount = 0;
+            const maxErrors = 20;
+            const promises = [];
+
+            function loadNextPlayer() {
+                if (currentIndex > batch.end) {
+                    // Minden player betöltve
+                    Promise.all(promises).then(() => {
+                        isLoading = false;
+                        document.getElementById('loadingMessage').style.display = 'none';
+                        document.getElementById('statusMessage').innerHTML = `✅ ${batch.name} betöltve!<br>🖱️ Kattints a videókra a manuális indításhoz.`;
+                        
+                        updateStats();
+                    });
+                    return;
+                }
+
+                if (errorCount >= maxErrors) {
+                    // Túl sok hiba
+                    isLoading = false;
+                    document.getElementById('loadingMessage').style.display = 'none';
+                    document.getElementById('statusMessage').innerHTML = 
+                        `⚠️ Betöltés leállt. ${playersReady}/${allYouTubeLinks.length} player betöltve.<br>Próbáld újra!`;
+                    updateStats();
+                    return;
+                }
+
+                const videoId = allYouTubeLinks[currentIndex];
+                const promise = createVideoPlayer(videoId, currentIndex);
+                promises.push(promise);
+                
+                currentIndex++;
+                setTimeout(loadNextPlayer, 100); // Kis késleltetés a következő player betöltéséhez
+            }
+
+            isLoading = true;
+            document.getElementById('loadingMessage').style.display = 'block';
+            loadNextPlayer();
+        }
+
+        // Batch törlése a memóriából
+        function clearBatch(batchIndex) {
+            const batch = batches[batchIndex];
+            
+            for (let i = batch.start; i <= batch.end; i++) {
+                const videoPlayer = document.getElementById(`videoPlayer${i}`);
+                if (videoPlayer) {
+                    videoPlayer.remove();
+                }
+                youtubePlayers[i] = null;
+            }
+            
+            playersReady -= batch.size;
+            updateStats();
+        }
+
+        // Dinamikus batch progress frissítés
+        function updateBatchProgress() {
+            const container = document.getElementById('batchProgressContainer');
+            container.innerHTML = '';
+            
+            batches.forEach((batch, index) => {
+                const step = document.createElement('div');
+                step.className = `batch-step ${index === currentBatchIndex ? 'active' : ''} ${index < currentBatchIndex ? 'completed' : ''}`;
+                step.id = `batch${index + 1}Step`;
+                
+                step.innerHTML = `
+                    <div>${batch.name}</div>
+                    <div>(${batch.start + 1}-${batch.end + 1})</div>
+                    <div style="font-size: 12px; margin-top: 5px;">${batch.size} videó</div>
+                `;
+                
+                container.appendChild(step);
+            });
+        }
+
+        // Kockázatértékelés
+        function updateRiskAssessment() {
+            const now = Date.now();
+            const timeSinceUpdate = now - riskAssessment.lastUpdate;
+            
+            riskAssessment.patternScore = Math.max(0, riskAssessment.patternScore - (timeSinceUpdate / 60000));
+            riskAssessment.timingScore = Math.max(0, riskAssessment.timingScore - (timeSinceUpdate / 60000));
+            riskAssessment.behaviorScore = Math.max(0, riskAssessment.behaviorScore - (timeSinceUpdate / 60000));
+            
+            riskAssessment.totalScore = (
+                riskAssessment.patternScore + 
+                riskAssessment.timingScore + 
+                riskAssessment.behaviorScore
+            ) / 3;
+            
+            riskAssessment.lastUpdate = now;
+            updateRiskDisplay();
+        }
+
+        function updateRiskDisplay() {
+            const riskPercent = riskAssessment.totalScore * 100;
+            const riskIndicator = document.getElementById('riskIndicator');
+            const riskStatus = document.getElementById('riskStatus');
+            
+            riskIndicator.style.left = `${riskPercent}%`;
+            
+            let riskLevel = 'low';
+            let riskText = '✅ Alacsony kockázat - Manuális mód';
+            let cardColor = 'safe';
+            
+            if (riskAssessment.totalScore > 0.8) {
+                riskLevel = 'high';
+                riskText = '⚠️ Figyelem - Kérdéses tevékenység észlelve';
+                cardColor = 'danger';
+            } else if (riskAssessment.totalScore > 0.6) {
+                riskLevel = 'medium';
+                riskText = 'ℹ️ Normál kockázat - Manuális mód';
+                cardColor = 'warning';
+            }
+            
+            riskStatus.textContent = riskText;
+            document.getElementById('riskCard').className = `security-card ${cardColor}`;
+            document.getElementById('riskCard').querySelector('div:last-child').textContent = 
+                riskLevel === 'high' ? 'Magas' : riskLevel === 'medium' ? 'Közepes' : 'Alacsony';
+        }
+
+        // Minden leállítása
+        function stopAll() {
+            if (gracefulShutdownActive) {
+                stopGracefulShutdown();
+            }
+            
+            if (currentBatchIndex >= 0) {
+                const batch = batches[currentBatchIndex];
+                const batchPlayers = youtubePlayers.slice(batch.start, batch.end + 1)
+                    .filter(player => player !== undefined && player !== null);
+                
+                batchPlayers.forEach((player) => {
+                    if (player && typeof player.stopVideo === 'function') {
+                        try {
+                            player.stopVideo();
+                        } catch (e) {
+                            console.log('Hiba a player leállításánál:', e);
+                        }
+                    }
+                });
+            }
+            
+            activePlayers = 0;
+            
+            currentBatchIndex = -1;
+            updateTimer();
+            document.getElementById('timerLabel').textContent = 'Manuális mód - Nincs időzítés';
+            updateStats();
+            
+            document.getElementById('statusMessage').innerHTML = '⏹️ Minden leállítva!';
+            
+            updateBatchProgress();
+        }
+
+        // Következő batch betöltése
+        function loadNextBatch() {
+            if (currentBatchIndex >= 0) {
+                clearBatch(currentBatchIndex);
+            }
+            
+            currentBatchIndex++;
+            
+            if (currentBatchIndex >= batches.length) {
+                // Ciklus befejezése
+                cycleCount++;
+                document.getElementById('statusMessage').innerHTML = 
+                    `✅ ${cycleCount}. ciklus befejezve! Összes lejátszás: ${playbackStats.totalPlaybacks}`;
+                
+                document.getElementById('statusMessage').innerHTML += '<br>🔄 Új ciklus előkészítése...';
+                
+                // Linkek keverése minden ciklus után
+                shuffleYouTubeLinks();
+                
+                currentBatchIndex = -1;
+                batches = generateDynamicBatches();
+                updateBatchProgress();
+                return;
+            }
+            
+            const batch = batches[currentBatchIndex];
+            document.getElementById('statusMessage').innerHTML = `${batch.name} betöltése...`;
+            
+            updateBatchProgress();
+            loadPlayersFromBatch(batch);
+        }
+
+        // Első batch betöltése
+        function loadFirstBatch() {
+            if (currentBatchIndex >= 0) {
+                clearBatch(currentBatchIndex);
+            }
+            
+            currentBatchIndex = 0;
+            const batch = batches[currentBatchIndex];
+            document.getElementById('statusMessage').innerHTML = `${batch.name} betöltése...`;
+            
+            updateBatchProgress();
+            loadPlayersFromBatch(batch);
+        }
+
+        // ========== MEMÓRIA MONITOR FUNKCIÓK ==========
+
+        // Memória monitorozás
+        function monitorMemory() {
+            if (!memoryStats.monitoringActive) return;
+
+            try {
+                const memoryInfo = getMemoryInfo();
+                updateMemoryDisplay(memoryInfo);
+                
+                if (memoryInfo.percent > MEMORY_CONFIG.CLEANUP_THRESHOLD * 100) {
+                    performAggressiveCleanup();
+                }
+            } catch (error) {
+                console.warn('Memória monitorozás hiba:', error);
+            }
+        }
+
+        // Memória információk gyűjtése
+        function getMemoryInfo() {
+            if (performance.memory) {
+                const memory = performance.memory;
+                return {
+                    used: Math.round(memory.usedJSHeapSize / (1024 * 1024)),
+                    total: Math.round(memory.totalJSHeapSize / (1024 * 1024)),
+                    limit: Math.round(memory.jsHeapSizeLimit / (1024 * 1024)),
+                    percent: Math.round((memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100)
+                };
+            }
+            
+            const estimatedUsed = Math.round((playersReady * 2) + (activePlayers * 5));
+            const estimatedTotal = Math.max(estimatedUsed * 2, 100);
+            
+            return {
+                used: estimatedUsed,
+                total: estimatedTotal,
+                limit: 512,
+                percent: Math.min(100, Math.round((estimatedUsed / 512) * 100))
+            };
+        }
+
+        // Memória információk megjelenítése
+        function updateMemoryDisplay(memoryInfo) {
+            document.getElementById('memoryUsage').textContent = `${memoryInfo.used} MB`;
+            document.getElementById('memoryLimit').textContent = `${memoryInfo.limit} MB`;
+            document.getElementById('memoryPercent').textContent = `${memoryInfo.percent}%`;
+            document.getElementById('cleanupCount').textContent = memoryStats.cleanupCount;
+            
+            const memoryBar = document.getElementById('memoryBar');
+            memoryBar.style.width = `${memoryInfo.percent}%`;
+            
+            if (memoryInfo.percent > 80) {
+                memoryBar.style.background = 'linear-gradient(90deg, #ff9800, #f44336)';
+            } else if (memoryInfo.percent > 60) {
+                memoryBar.style.background = 'linear-gradient(90deg, #ffd93d, #ff9800)';
+            } else {
+                memoryBar.style.background = 'linear-gradient(90deg, #4CAF50, #ffd93d)';
+            }
+        }
+
+        // Agresszív memóriatisztítás
+        function performAggressiveCleanup() {
+            if (!MEMORY_CONFIG.AGGRESSIVE_CLEANUP) return;
+            
+            const memoryInfo = getMemoryInfo();
+            if (memoryInfo.percent <= MEMORY_CONFIG.CLEANUP_THRESHOLD * 100) return;
+            
+            const cleanupAlert = document.getElementById('cleanupAlert');
+            cleanupAlert.style.display = 'block';
+            
+            console.log(`🧹 Memóriatisztítás indítása: ${memoryInfo.percent}% használat`);
+            
+            if (currentBatchIndex >= 0) {
+                const batch = batches[currentBatchIndex];
+                const batchPlayers = youtubePlayers.slice(batch.start, batch.end + 1)
+                    .filter(player => player !== undefined && player !== null);
+                
+                batchPlayers.forEach((player) => {
+                    if (player && typeof player.stopVideo === 'function') {
+                        try {
+                            player.stopVideo();
+                        } catch (e) {
+                            console.log('Hiba a player leállításánál:', e);
+                        }
+                    }
+                });
+            }
+            
+            const videoGrid = document.getElementById('videoGrid');
+            videoGrid.innerHTML = '';
+            
+            if (currentBatchIndex >= 0) {
+                const currentBatch = batches[currentBatchIndex];
+                for (let i = 0; i < youtubePlayers.length; i++) {
+                    if (i < currentBatch.start || i > currentBatch.end) {
+                        youtubePlayers[i] = null;
+                    }
+                }
+            } else {
+                youtubePlayers = new Array(allYouTubeLinks.length);
+            }
+            
+            forceGarbageCollection();
+            
+            const beforeMemory = memoryInfo.used;
+            const afterMemory = getMemoryInfo().used;
+            const memoryFreed = beforeMemory - afterMemory;
+            
+            memoryStats.cleanupCount++;
+            memoryStats.lastCleanup = new Date();
+            memoryStats.totalMemoryFreed += memoryFreed;
+            
+            setTimeout(() => {
+                cleanupAlert.style.display = 'none';
+            }, 5000);
+            
+            console.log(`✅ Tisztítás befejezve: ${memoryFreed} MB memória felszabadítva`);
+            document.getElementById('statusMessage').innerHTML = 
+                `🧹 Memóriatisztítás: ${memoryFreed} MB felszabadítva (${memoryStats.cleanupCount}. alkalommal)`;
+        }
+
+        // Szemétgyűjtés kényszerítése
+        function forceGarbageCollection() {
+            if (window.gc) {
+                window.gc();
+            }
+            
+            try {
+                const tempArray = new Array(100000).fill(0);
+                setTimeout(() => {
+                    tempArray.length = 0;
+                }, 100);
+                
+                return new Promise(resolve => {
+                    setTimeout(resolve, 100);
+                });
+            } catch (error) {
+                console.log('GC kényszerítés nem sikerült:', error);
+            }
+        }
+
+        // Kényszerített manuális tisztítás
+        function forceManualCleanup() {
+            document.getElementById('statusMessage').innerHTML = '🧹 Kényszerített memóriatisztítás...';
+            performAggressiveCleanup();
+        }
+
+        // ========== ESEMÉNYKEZELŐK ==========
+
+        // Batch betöltés gomb
+        document.getElementById('loadBatchButton').addEventListener('click', function() {
+            loadFirstBatch();
+        });
+
+        // Graciális leállás gomb
+        document.getElementById('gracefulShutdownButton').addEventListener('click', function() {
+            startGracefulShutdown();
+        });
+
+        // Következő batch betöltése gomb
+        document.getElementById('nextBatchButton').addEventListener('click', function() {
+            loadNextBatch();
+        });
+
+        // Leállítás gomb
+        document.getElementById('stopButton').addEventListener('click', stopAll);
+
+        // Manuális tisztítás gomb
+        document.getElementById('manualCleanup').addEventListener('click', forceManualCleanup);
+
+        // YouTube API betöltése
+        function onYouTubeIframeAPIReady() {
+            document.getElementById('statusMessage').textContent = 
+                'YouTube API kész! Videós mód aktív reklámokkal + Manuális vezérlés.';
+            updateStats();
+            updateTimer();
+            loadPlaybackStats();
+            updateBatchProgress();
+            updateRiskAssessment();
+            updateAdStats();
+            
+            setInterval(monitorMemory, MEMORY_CONFIG.MONITOR_INTERVAL);
+        }
+
+        // Oldal betöltésekor
+        window.addEventListener('load', function() {
+            // Linkek keverése minden oldalbetöltéskor
+            shuffleYouTubeLinks();
+            
+            updateStats();
+            updateBatchProgress();
+            updateRiskAssessment();
+            updateAdStats();
+            
+            setInterval(() => {
+                const patterns = ['Manuális', 'Felhasználói', 'Interaktív', 'Kézi'];
+                const timings = ['Felhasználó által', 'Kézi', 'Igény szerinti', 'Manuális'];
+                const behaviors = ['Emberi', 'Interaktív', 'Valós', 'Kézi'];
+                
+                document.getElementById('patternCard').querySelector('div:last-child').textContent = 
+                    patterns[Math.floor(Math.random() * patterns.length)];
+                document.getElementById('timingCard').querySelector('div:last-child').textContent = 
+                    timings[Math.floor(Math.random() * timings.length)];
+                document.getElementById('behaviorCard').querySelector('div:last-child').textContent = 
+                    behaviors[Math.floor(Math.random() * behaviors.length)];
+            }, 10000);
+            
+            setInterval(updateRiskAssessment, 5000);
+        });
+    </script>
+</body>
+</html>
